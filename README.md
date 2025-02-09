@@ -2,11 +2,11 @@
 List Food, Stay Fresh, Reduce Waste
 
 # Team Members
-Pruthvi Patel (200509419)
+* Pruthvi Patel (200509419)
 * Poojan Patel (200518202)
 
 # UN SDG(s)
-SDG 12 - Responsible Consumption and Production
+* SDG 12 - Responsible Consumption and Production
 
 # Project idea
 GroceryMind is a smart food inventory management system that helps users list grocery items, track expiry dates, and receive reminders before food goes bad. It also includes a smart shopping list feature, ensuring users only buy what they need, reducing waste, and saving money.
