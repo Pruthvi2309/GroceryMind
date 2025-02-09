@@ -3,7 +3,7 @@ List Food, Stay Fresh, Reduce Waste
 
 # Team Members
 Pruthvi Patel (200509419)
-Poojan Patel (200518202)
+* Poojan Patel (200518202)
 
 # UN SDG(s)
 SDG 12 - Responsible Consumption and Production
