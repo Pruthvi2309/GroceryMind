@@ -24,6 +24,10 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/grocerymind
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/shopping-list", require("./routes/shoppingList"));
+app.use("/api/members", require("./routes/member"));
+app.use("/api/foods", require("./routes/food"));
+app.use("/api/categories", require("./routes/category"));
 
 // Protected Route Example
 const auth = require("./middleware/auth");
