@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Dimensions, Alert } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get("window");
 
@@ -25,6 +26,7 @@ const WalkthroughScreen = ({ navigation }) => {
       {/* Transparent Overlay */}
       <View style={styles.overlay} />
 
+     
       {/* Logo */}
       <Text style={styles.logo}>GROCERYMIND</Text>
 
@@ -50,7 +52,14 @@ const WalkthroughScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
           <Text style={styles.applyButtonText}>Apply</Text>
         </TouchableOpacity>
+
+        {/* Cancel Button */}
+      <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.cancelButtonText}>Cancel</Text>
+      </TouchableOpacity>
+
       </View>
+       
     </View>
   );
 };
@@ -87,6 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 15,
     padding: 30,
+    paddingBottom: 50, 
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
@@ -131,6 +141,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  cancelButton: {
+    // position: "absolute",
+    // top: 250,
+    // // right: 20,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  cancelButtonText: {
+    color: "#007BFF",
+    fontWeight: "bold",
+    fontSize: 18,
+  }
 });
 
 export default WalkthroughScreen;

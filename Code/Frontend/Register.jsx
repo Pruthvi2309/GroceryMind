@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Dimensions 
 import { Ionicons } from "@expo/vector-icons"; // Importing eye icon
 import { Alert } from "react-native";
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get("window");
 
@@ -13,7 +14,7 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const API_BASE_URL = "http://172.16.1.203:5000";
+  const API_BASE_URL = "http://10.69.74.34:5000";
 
   const handleRegister = async () => {
     if (!firstName.trim()) {
@@ -42,6 +43,7 @@ const Register = ({ navigation }) => {
       });
 
       if (response.data.token) {
+        await AsyncStorage.setItem('token', response.data.token); 
         Alert.alert("Success", "Registration Successful!");
         navigation.replace("Walkthrough"); // Navigate to Walkthrough
       }

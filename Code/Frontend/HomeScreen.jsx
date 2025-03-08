@@ -1,189 +1,79 @@
-// import React, { useState } from "react";
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   FlatList,
-//   Modal,
-//   StyleSheet,
-// } from "react-native";
-// import { Ionicons } from "@expo/vector-icons";
-// import DateTimePicker from "@react-native-community/datetimepicker";
-
-// const HomeScreen = () => {
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [quantity, setQuantity] = useState(1);
-//   const [expiryDate, setExpiryDate] = useState(new Date());
-//   const [showDatePicker, setShowDatePicker] = useState(false);
-//   const [categories, setCategories] = useState({
-//     Fruits: true,
-//     Vegetables: true,
-//     Meat: true,
-//   });
-
-//   const toggleCategory = (category) => {
-//     setCategories((prev) => ({ ...prev, [category]: !prev[category] }));
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Header & Search Bar */}
-//       <View style={styles.header}>
-//         <Text style={styles.logo}>GroceryMind</Text>
-//         <View style={styles.icons}>
-//           <Ionicons name="notifications-outline" size={24} color="black" />
-//           <Ionicons name="filter-outline" size={24} color="black" style={{ marginLeft: 10 }} />
-//         </View>
-//       </View>
-//       <TextInput style={styles.searchBar} placeholder="Search items..." />
-
-//       {/* Categories */}
-//       {Object.keys(categories).map((category) => (
-//         <View key={category}>
-//           <TouchableOpacity
-//             style={styles.categoryHeader}
-//             onPress={() => toggleCategory(category)}
-//           >
-//             <Text style={[styles.categoryText, { color: getCategoryColor(category) }]}>
-//               {category}
-//             </Text>
-//             <Ionicons
-//               name={categories[category] ? "chevron-up-outline" : "chevron-down-outline"}
-//               size={24}
-//               color="black"
-//             />
-//           </TouchableOpacity>
-
-//           {categories[category] && (
-//             <FlatList
-//               data={getCategoryItems(category)}
-//               keyExtractor={(item) => item.name}
-//               renderItem={({ item }) => (
-//                 <View style={styles.itemCard}>
-//                   <Text style={styles.itemName}>{item.name}</Text>
-//                   <Text style={styles.expiryText}>Expires in {item.expiry} days</Text>
-//                 </View>
-//               )}
-//             />
-//           )}
-//         </View>
-//       ))}
-
-//       {/* Floating Add Button */}
-//       <TouchableOpacity style={styles.fab} onPress={() => setModalVisible(true)}>
-//         <Ionicons name="add" size={30} color="white" />
-//       </TouchableOpacity>
-
-//       {/* Add Item Modal */}
-//       <Modal animationType="slide" transparent={true} visible={modalVisible}>
-//         <View style={styles.modalContainer}>
-//           <View style={styles.modalContent}>
-//             <Text style={styles.modalTitle}>Add New Item</Text>
-//             <TextInput style={styles.input} placeholder="Item Name" />
-//             <View style={styles.quantityContainer}>
-//               <Text>Quantity:</Text>
-//               <TouchableOpacity onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>
-//                 <Text style={styles.button}>-</Text>
-//               </TouchableOpacity>
-//               <Text>{quantity}</Text>
-//               <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
-//                 <Text style={styles.button}>+</Text>
-//               </TouchableOpacity>
-//             </View>
-//             <TextInput style={styles.input} placeholder="Category (e.g., Fruits)" />
-//             <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
-//               <Text>Expiry Date: {expiryDate.toDateString()}</Text>
-//             </TouchableOpacity>
-
-//             {showDatePicker && (
-//               <DateTimePicker
-//                 value={expiryDate}
-//                 mode="date"
-//                 display="default"
-//                 onChange={(event, selectedDate) => {
-//                   setShowDatePicker(false);
-//                   if (selectedDate) setExpiryDate(selectedDate);
-//                 }}
-//               />
-//             )}
-
-//             <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(false)}>
-//               <Text style={styles.addButtonText}>Add Item</Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity onPress={() => setModalVisible(false)}>
-//               <Text style={styles.cancelText}>Cancel</Text>
-//             </TouchableOpacity>
-//           </View>
-//         </View>
-//       </Modal>
-//     </View>
-//   );
-// };
-
-// const getCategoryColor = (category) => {
-//   return category === "Fruits" ? "orange" : category === "Vegetables" ? "green" : "red";
-// };
-
-// const getCategoryItems = (category) => {
-//   const items = {
-//     Fruits: [
-//       { name: "Lemon", expiry: 6 },
-//       { name: "Banana", expiry: 4 },
-//     ],
-//     Vegetables: [
-//       { name: "Carrot", expiry: 5 },
-//       { name: "Spinach", expiry: 7 },
-//     ],
-//     Meat: [{ name: "Chicken", expiry: 3 }],
-//   };
-//   return items[category] || [];
-// };
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, paddingTop: 60, padding: 20, backgroundColor: "white" },
-//   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-//   logo: { fontSize: 24, fontWeight: "bold" },
-//   icons: { flexDirection: "row" },
-//   searchBar: { marginVertical: 10, padding: 10, backgroundColor: "#F0F0F0", borderRadius: 8 },
-//   categoryHeader: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 10 },
-//   categoryText: { fontSize: 18, fontWeight: "bold" },
-//   itemCard: { padding: 15, backgroundColor: "#F9F9F9", marginVertical: 5, borderRadius: 10 },
-//   itemName: { fontWeight: "bold" },
-//   expiryText: { color: "gray" },
-//   fab: { position: "absolute", bottom: 30, right: 30, backgroundColor: "blue", padding: 15, borderRadius: 30 },
-//   modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
-//   modalContent: { width: "80%", padding: 20, backgroundColor: "white", borderRadius: 10 },
-//   modalTitle: { fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
-//   input: { padding: 10, borderWidth: 1, borderRadius: 8, marginVertical: 5 },
-//   button: { paddingHorizontal: 10, fontSize: 18 },
-//   addButton: { backgroundColor: "blue", padding: 10, borderRadius: 8, alignItems: "center" },
-//   addButtonText: { color: "white", fontWeight: "bold" },
-//   cancelText: { textAlign: "center", color: "blue", marginTop: 10 },
-// });
-
-// export default HomeScreen;
-
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Modal } from "react-native";
+import React, { useState, useEffect } from "react";
+import { 
+  View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Modal, Alert 
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AddNewItemModal from "./AddNewItemModal";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const API_BASE_URL = "http://10.69.74.34:5000";
+
+
 
 const HomeScreen = () => {
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState({});
+  const [userId, setUserId] = useState("");
 
-  // Add new item to list
-  const addItem = (newItem) => {
-    setItems([...items, newItem]);
-    setModalVisible(false);
+  // Fetch User ID from AsyncStorage
+  const fetchUserId = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const response = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
+      headers: { Authorization: token }
+    });
+    setUserId(response.data._id);
   };
 
-  // Delete item from list
-  const deleteItem = (index) => {
-    const updatedItems = items.filter((_, i) => i !== index);
-    setItems(updatedItems);
+  // Fetch Food Items
+  const fetchFoodItems = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/foods/${userId}`);
+      setItems(response.data);
+    } catch (error) {
+      console.error("Failed to fetch food items:", error);
+      setItems([]);
+    }
+  };
+
+  // Fetch Categories for Dropdown
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/categories`);
+      setCategories(response.data.map(cat => cat.name)); // Only fetch category names
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
+
+  // Add new item to database
+  const addItem = async (newItem) => {
+    try {
+      await axios.post(`${API_BASE_URL}/api/foods/add`, {
+        userId,
+        name: newItem.itemName,
+        quantity: newItem.quantity,
+        category: newItem.category,
+        expiryDate: newItem.expiryDate
+      });
+
+      fetchFoodItems();
+      setModalVisible(false);
+    } catch (error) {
+      Alert.alert("Error", "Failed to add food item.");
+    }
+  };
+
+  // Delete item from database
+  const deleteItem = async (itemId) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/api/foods/delete/${itemId}`);
+      fetchFoodItems();
+    } catch (error) {
+      Alert.alert("Error", "Failed to delete food item.");
+    }
   };
 
   // Toggle category expand/collapse
@@ -199,6 +89,17 @@ const HomeScreen = () => {
     acc[item.category] = acc[item.category] ? [...acc[item.category], item] : [item];
     return acc;
   }, {});
+
+  useEffect(() => {
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchFoodItems();
+      fetchCategories();
+    }
+  }, [userId]);
 
   return (
     <View style={styles.container}>
@@ -216,55 +117,97 @@ const HomeScreen = () => {
 
       {/* Render Items Grouped by Category */}
       <FlatList
-        data={Object.keys(groupedItems)}
-        keyExtractor={(category) => category}
-        renderItem={({ item: category }) => (
-          <View>
-            {/* Category Header */}
-            <TouchableOpacity style={styles.categoryHeader} onPress={() => toggleCategory(category)}>
-              <Text style={[styles.categoryText, categoryColors[category]]}>{category}</Text>
-              <Ionicons
-                name={expandedCategories[category] ? "chevron-up" : "chevron-down"}
-                size={20}
-                color="black"
-              />
-            </TouchableOpacity>
+    data={Object.keys(groupedItems)}
+    keyExtractor={(category) => category}
+    renderItem={({ item: category }) => (
+      <View>
+        {/* Category Header with Background Color */}
+        <TouchableOpacity 
+          style={[
+            styles.categoryHeader, 
+            { backgroundColor: categoryColors[category] || "white" }  // Apply color to category header
+          ]}
+          onPress={() => toggleCategory(category)}
+        >
+          <Text style={styles.categoryText}>
+            {category}
+          </Text>
+          <Ionicons
+            name={expandedCategories[category] ? "chevron-up" : "chevron-down"}
+            size={20}
+            color="black"
+          />
+        </TouchableOpacity>
 
-            {/* Category Items (Collapsible) */}
-            {expandedCategories[category] &&
-              groupedItems[category].map((item, index) => (
-                <View style={styles.itemContainer} key={index}>
-                  <View>
-                    <Text style={styles.itemName}>{item.itemName}</Text>
-                    <Text style={styles.expiryText}>
-                      Expires in {Math.ceil((item.expiryDate - new Date()) / (1000 * 60 * 60 * 24))} days
-                    </Text>
-                  </View>
-                  <TouchableOpacity onPress={() => deleteItem(items.indexOf(item))}>
-                    <Ionicons name="trash" size={24} color="red" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-          </View>
-        )}
-      />
+        {/* Category Items (Collapsible) */}
+        {expandedCategories[category] &&
+          groupedItems[category].map((item, index) => (
+            <View style={styles.itemContainer} key={index}>
+              <View>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.expiryText}>
+                  Expires in {Math.ceil((new Date(item.expiryDate) - new Date()) / (1000 * 60 * 60 * 24))} days
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => deleteItem(item._id)}>
+                <Ionicons name="trash" size={24} color="red" />
+              </TouchableOpacity>
+            </View>
+          ))}
+      </View>
+    )}
+/>
+
 
       {/* Floating Action Button */}
-      <TouchableOpacity style={styles.fab} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity 
+        style={styles.fab} 
+        onPress={() => setModalVisible(true)}
+      >
         <Ionicons name="add" size={24} color="white" />
       </TouchableOpacity>
 
       {/* Add Item Modal */}
-      <AddNewItemModal visible={modalVisible} onClose={() => setModalVisible(false)} onAddItem={addItem} />
+      <AddNewItemModal 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)} 
+        onAddItem={addItem} 
+        categories={categories}
+      />
     </View>
   );
 };
 
 // Category Colors
 const categoryColors = {
-  Fruits: { color: "orange" },
-  Vegetables: { color: "green" },
-  Meat: { color: "red" },
+  "Fruits": "orange",
+  "Vegetables": "green",
+  "Meats": "red",
+  "Seafood": "#1E90FF",            // Blue for seafood (ocean theme)
+  "Dairy Products": "#FFD700",     // Yellow for dairy
+  "Eggs": "#F0E68C",               // Light yellow for eggs
+  "Grain Products": "#CD853F",     // Brownish for grains
+  "Legumes and Pulses": "#8A2BE2", // Purple for legumes
+  "Nuts and Seeds": "#D2691E",     // Nutty brown
+  "Oils and Fats": "#FF4500",      // Orange for oils
+  "Herbs and Spices": "#556B2F",   // Deep green for herbs
+  "Condiments and Sauces": "#8B0000", // Deep red for sauces
+  "Bakery and Desserts": "#FFB6C1",   // Light pink for bakery
+  "Snacks": "#FFA07A",             // Light orange for snacks
+  "Beverages": "#00CED1",          // Teal for beverages
+  "Frozen Foods": "#4682B4",       // Icy blue for frozen foods
+  "Canned Foods": "#8B4513",       // Dark brown for canned foods
+  "Prepared and Processed Foods": "#A52A2A", // Dark red for processed
+  "Baby Food": "#FF69B4",          // Baby pink for baby food
+  "International Cuisine Ingredients": "#DDA0DD", // Light purple for international foods
+  "Vegan and Plant-Based Foods": "#32CD32", // Bright green for vegan
+  "Breakfast Items": "#F5DEB3",    // Wheat color for breakfast
+  "Baking Supplies": "#DEB887",    // Beige for baking
+  "Health and Dietary Products": "#ADFF2F", // Neon green for health items
+  "Miscellaneous Items": "#A9A9A9", // Grey for miscellaneous
+  "Organic and Specialty Foods": "#228B22", // Deep forest green for organic
+  "Household Essentials": "#708090", // Slate grey for household
+  "Seasonal and Holiday Foods": "#B22222", // Dark red for festive theme
 };
 
 // Styles
@@ -285,6 +228,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 8,         // Rounded corners for category block
+    marginBottom: 5, 
   },
   categoryText: { fontSize: 20, fontWeight: "bold" },
   itemContainer: {
