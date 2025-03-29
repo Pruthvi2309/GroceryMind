@@ -12,7 +12,7 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const API_BASE_URL = "http://10.69.74.34:5000";
+  const API_BASE_URL = "http://10.69.73.30:5000";
 
   const handleLogin = async () => {
     if (contactNo.length !== 10 || isNaN(contactNo)) {

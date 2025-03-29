@@ -40,6 +40,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
 import Login from "./Login";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
@@ -49,7 +50,8 @@ import ShoppingList from "./ShoppingList";
 import Members from "./Members";
 import Profile from "./Profile";
 import AboutGroceryMind from "./AboutGroceryMind";
-import { Ionicons } from "@expo/vector-icons";
+import MealSuggestion from "./mealSuggestion";
+import VideoPlayer from "./VideoPlayer";
 
 // Stack Navigator for Auth Screens
 const Stack = createStackNavigator();
@@ -62,17 +64,10 @@ const BottomTabNavigator = () => (
     screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
         let iconName;
-
-        if (route.name === "MyFood") {
-          iconName = "fast-food-outline";
-        } else if (route.name === "ShoppingList") {
-          iconName = "cart-outline";
-        } else if (route.name === "Members") {
-          iconName = "people-outline";
-        } else if (route.name === "Profile") {
-          iconName = "person-outline";
-        }
-
+        if (route.name === "MyFood") iconName = "fast-food-outline";
+        else if (route.name === "ShoppingList") iconName = "cart-outline";
+        else if (route.name === "Members") iconName = "people-outline";
+        else if (route.name === "Profile") iconName = "person-outline";
         return <Ionicons name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: "#007BFF",
@@ -98,10 +93,9 @@ export default function App() {
         <Stack.Screen name="Walkthrough" component={WalkthroughScreen} />
         <Stack.Screen name="Home" component={BottomTabNavigator} />
         <Stack.Screen name="AboutGroceryMind" component={AboutGroceryMind} />
+        <Stack.Screen name="MealSuggestion" component={MealSuggestion} />
+        <Stack.Screen name="VideoPlayer" component={VideoPlayer} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-
-

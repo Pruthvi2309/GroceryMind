@@ -1,22 +1,43 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Dimensions, Alert } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const API_BASE_URL = "http://10.69.73.30:5000";
 
 const { width, height } = Dimensions.get("window");
 
 const WalkthroughScreen = ({ navigation }) => {
   const [remindDays, setRemindDays] = useState("");
 
-  const handleApply = () => {
+  const handleApply = async () => {
     if (!remindDays || isNaN(remindDays) || parseInt(remindDays) <= 0) {
       Alert.alert("Invalid Input", "Please enter a valid number of days.");
       return;
     }
 
-    Alert.alert("Reminder Set", `Best Before ${remindDays} days`, [
-        { text: "OK", onPress: () => navigation.replace("Home") }, // Navigate to Home Screen
-      ]);
-  };
+    try {
+        const token = await AsyncStorage.getItem("token");   // Correct token retrieval
+        const profileResponse = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+      });
+
+        const userId = profileResponse.data._id;  // Correctly retrieve userId
+
+        await axios.post(`${API_BASE_URL}/api/users/setReminderDays`, {
+            userId,
+            reminderDays: parseInt(remindDays),
+        });
+
+        Alert.alert("Reminder Set", `Best Before ${remindDays} days`, [
+            { text: "OK", onPress: () => navigation.replace("Home") },
+        ]);
+    } catch (error) {
+        Alert.alert("Error", "Failed to set reminder days.");
+        console.error(error);
+    }
+}
 
   return (
     <View style={styles.container}>

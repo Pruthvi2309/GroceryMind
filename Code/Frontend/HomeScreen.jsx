@@ -7,7 +7,7 @@ import AddNewItemModal from "./AddNewItemModal";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = "http://10.69.74.34:5000";
+const API_BASE_URL = "http://10.69.73.30:5000";
 
 
 
@@ -22,7 +22,7 @@ const HomeScreen = () => {
   const fetchUserId = async () => {
     const token = await AsyncStorage.getItem("token");
     const response = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
-      headers: { Authorization: token }
+      headers: { Authorization: `Bearer ${token}` } 
     });
     setUserId(response.data._id);
   };
@@ -30,7 +30,13 @@ const HomeScreen = () => {
   // Fetch Food Items
   const fetchFoodItems = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/foods/${userId}`);
+      const token = await AsyncStorage.getItem("token");
+      if (!token) return; // Handle case if no token is available
+  
+      const response = await axios.get(`${API_BASE_URL}/api/foods`, {
+        headers: { Authorization: `Bearer ${token}` },
+        timeout: 10000,
+      });
       setItems(response.data);
     } catch (error) {
       console.error("Failed to fetch food items:", error);
@@ -49,32 +55,42 @@ const HomeScreen = () => {
   };
 
   // Add new item to database
-  const addItem = async (newItem) => {
-    try {
+const addItem = async (newItem) => {
+  try {
+      const token = await AsyncStorage.getItem("token");
+
       await axios.post(`${API_BASE_URL}/api/foods/add`, {
-        userId,
-        name: newItem.itemName,
-        quantity: newItem.quantity,
-        category: newItem.category,
-        expiryDate: newItem.expiryDate
+          userId,
+          name: newItem.itemName,
+          quantity: newItem.quantity,
+          category: newItem.category,
+          expiryDate: newItem.expiryDate
+      }, {
+          headers: { Authorization: `Bearer ${token}` }
       });
 
       fetchFoodItems();
       setModalVisible(false);
-    } catch (error) {
+  } catch (error) {
+      console.error("Error adding item:", error);
       Alert.alert("Error", "Failed to add food item.");
-    }
-  };
+  }
+};
 
-  // Delete item from database
-  const deleteItem = async (itemId) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/api/foods/delete/${itemId}`);
+// Delete food item from database
+const deleteItem = async (itemId) => {
+  try {
+      const token = await AsyncStorage.getItem("token");
+      await axios.delete(`${API_BASE_URL}/api/foods/delete/${itemId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+      });
+
       fetchFoodItems();
-    } catch (error) {
+  } catch (error) {
+      console.error("Error deleting item:", error);
       Alert.alert("Error", "Failed to delete food item.");
-    }
-  };
+  }
+};
 
   // Toggle category expand/collapse
   const toggleCategory = (category) => {

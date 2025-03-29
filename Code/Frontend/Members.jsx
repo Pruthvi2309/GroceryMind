@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = "http://10.69.74.34:5000";
+const API_BASE_URL = "http://10.69.73.30:5000";
 
 const Members = ({ navigation }) => {
     const [members, setMembers] = useState([]);
@@ -20,7 +20,7 @@ const Members = ({ navigation }) => {
         try {
             const token = await AsyncStorage.getItem('token');
             const response = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
-                headers: { Authorization: token }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setUserId(response.data._id);
         } catch (error) {

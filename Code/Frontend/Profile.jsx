@@ -6,12 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 
-const API_BASE_URL = "http://10.69.74.34:5000";
+const API_BASE_URL = "http://10.69.73.30:5000";
 
 const Profile = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [userData, setUserData] = useState({ firstName: "", lastName: "" });
-    const [email, setEmail] = useState("");
+    // const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [resetPassword, setResetPassword] = useState("");
 
@@ -26,7 +26,7 @@ const Profile = ({ navigation }) => {
                 }
 
                 const response = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
-                    headers: { Authorization: token }
+                    headers: { Authorization: `Bearer ${token}` } 
                 });
 
                 setUserData(response.data);
@@ -77,6 +77,16 @@ const Profile = ({ navigation }) => {
                     <Text style={styles.optionText}>Profile Setup</Text>
                     <Ionicons name="chevron-forward-outline" size={20} />
                 </TouchableOpacity>
+
+
+                <TouchableOpacity
+                    style={styles.option}
+                    onPress={() => navigation.navigate("MealSuggestion")} // New meal suggestion link
+                >
+                    <Text style={styles.optionText}>Meal Suggestions</Text>
+                    <Ionicons name="chevron-forward-outline" size={20} />
+                </TouchableOpacity>
+
 
                 <TouchableOpacity 
                     style={styles.option} 
@@ -130,12 +140,12 @@ const Profile = ({ navigation }) => {
                             editable={false}
                         />
 
-                        <TextInput
+                        {/* <TextInput
                             style={styles.input}
                             placeholder="Email"
                             value={email}
-                            onChangeText={setEmail}
-                        />
+                            onChangeText={setEmail}  
+                        /> */}
 
                         <TextInput
                             style={styles.input}
