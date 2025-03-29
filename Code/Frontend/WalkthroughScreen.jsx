@@ -19,15 +19,17 @@ const WalkthroughScreen = ({ navigation }) => {
 
     try {
         const token = await AsyncStorage.getItem("token");   // Correct token retrieval
-        const profileResponse = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-      });
+        if (!token) {
+            console.error("Token is missing");
+            Alert.alert("Error", "Authorization token is missing.");
+            return;
+        }
 
-        const userId = profileResponse.data._id;  // Correctly retrieve userId
-
+        // No need to send userId, as it's fetched in the backend via the token
         await axios.post(`${API_BASE_URL}/api/users/setReminderDays`, {
-            userId,
             reminderDays: parseInt(remindDays),
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
         Alert.alert("Reminder Set", `Best Before ${remindDays} days`, [
