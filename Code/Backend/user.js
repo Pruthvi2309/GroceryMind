@@ -13,6 +13,7 @@ router.post("/setReminderDays", auth, async (req, res) => {
     }
 
     try {
+        // No need for userId in the body, we can extract it from the auth token
         const user = await User.findByIdAndUpdate(
             req.userId,  // Extracted securely from the token
             { $set: { reminderDays } },
