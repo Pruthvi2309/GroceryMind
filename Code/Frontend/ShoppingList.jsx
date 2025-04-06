@@ -6,7 +6,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from "@expo/vector-icons";
 
-const API_BASE_URL = "http://10.69.73.30:5000";
+const API_BASE_URL = "http://10.69.73.63:5000";
 
 const ShoppingList = () => {
     const [shoppingList, setShoppingList] = useState([]);

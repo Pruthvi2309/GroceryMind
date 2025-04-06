@@ -7,7 +7,7 @@ import AddNewItemModal from "./AddNewItemModal";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = "http://10.69.73.30:5000";
+const API_BASE_URL = "http://10.69.73.63:5000";
 
 
 
@@ -17,6 +17,7 @@ const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState({});
   const [userId, setUserId] = useState("");
+  const [reminderDays, setReminderDays] = useState(3); // Default reminder days
 
   // Fetch User ID from AsyncStorage
   const fetchUserId = async () => {
@@ -25,6 +26,7 @@ const HomeScreen = () => {
       headers: { Authorization: `Bearer ${token}` } 
     });
     setUserId(response.data._id);
+    setReminderDays(response.data.reminderDays || 3);
   };
 
   // Fetch Food Items
@@ -106,6 +108,13 @@ const deleteItem = async (itemId) => {
     return acc;
   }, {});
 
+
+  const calculateDaysLeft = (expiryDate) => {
+    const today = new Date();
+    const expiry = new Date(expiryDate);
+    return Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)); // Days remaining
+  };
+
   useEffect(() => {
     fetchUserId();
   }, []);
@@ -157,19 +166,23 @@ const deleteItem = async (itemId) => {
 
         {/* Category Items (Collapsible) */}
         {expandedCategories[category] &&
-          groupedItems[category].map((item, index) => (
+          groupedItems[category].map((item, index) => {
+             const daysLeft = calculateDaysLeft(item.expiryDate);
+              const isExpiringSoon = daysLeft <= reminderDays && daysLeft >= 0; // If the item will expire in 3 or fewer days
+              return (
             <View style={styles.itemContainer} key={index}>
               <View>
                 <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.expiryText}>
-                  Expires in {Math.ceil((new Date(item.expiryDate) - new Date()) / (1000 * 60 * 60 * 24))} days
+                <Text style={[styles.expiryText, isExpiringSoon && styles.expiryRed]}>
+                      Expires in {daysLeft} days
                 </Text>
               </View>
               <TouchableOpacity onPress={() => deleteItem(item._id)}>
                 <Ionicons name="trash" size={24} color="red" />
               </TouchableOpacity>
             </View>
-          ))}
+              );
+    })}
       </View>
     )}
 />
@@ -259,6 +272,9 @@ const styles = StyleSheet.create({
   },
   itemName: { fontSize: 18, fontWeight: "bold" },
   expiryText: { fontSize: 14, color: "gray" },
+  expiryRed: {
+    color: 'red', // Change the color of expiring items to red
+  },
   fab: {
     position: "absolute",
     bottom: 20,

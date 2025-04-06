@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
 
-const API_BASE_URL = "http://10.69.73.30:5000";
+const API_BASE_URL = "http://10.69.73.63:5000";
 
 const AddNewItemModal = ({ visible, onClose, onAddItem }) => {
   const [itemName, setItemName] = useState("");

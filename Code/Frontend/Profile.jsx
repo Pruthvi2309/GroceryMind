@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 
-const API_BASE_URL = "http://10.69.73.30:5000";
+const API_BASE_URL = "http://10.69.73.63:5000";
 
 const Profile = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
